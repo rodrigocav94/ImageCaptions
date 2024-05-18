@@ -54,6 +54,7 @@ class ViewController: UITableViewController {
                 .appendingPathComponent(selectedImageCaption.imageName)
                 .path()
         )
+        vc.caption = selectedImageCaption.caption
         navigationController?.pushViewController(vc, animated: true)
     }
 }
