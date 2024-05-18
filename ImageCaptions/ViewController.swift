@@ -45,6 +45,17 @@ class ViewController: UITableViewController {
         
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedImageCaption = imageCaptions[indexPath.row]
+        let vc = DetailViewController()
+        vc.uiImage = UIImage(
+            contentsOfFile: getDocumentsDirectory()
+                .appendingPathComponent(selectedImageCaption.imageName)
+                .path()
+        )
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 // MARK: - Loading and Saving to UserDefaults and Document Directory
