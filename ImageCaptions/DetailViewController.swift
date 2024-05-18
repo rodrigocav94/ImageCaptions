@@ -55,6 +55,7 @@ class DetailViewController: UIViewController {
         let confirmChangeAction = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
             guard let typedCaption = ac.textFields?.first?.text, !typedCaption.isEmpty else { return }
             self?.caption = typedCaption
+            NotificationCenter.default.post(name: UIApplication.updateImageCaptions, object: nil, userInfo: ["caption": typedCaption])
         }
         ac.addAction(confirmChangeAction)
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))

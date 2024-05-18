@@ -13,11 +13,13 @@ class ViewController: UITableViewController {
             saveImageCaptions()
         }
     }
+    var selectedRow: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavBar()
         loadImageCaptions()
+        setupNotificationCenter()
     }
 
     func setupNavBar() {
@@ -55,6 +57,7 @@ class ViewController: UITableViewController {
                 .path()
         )
         vc.caption = selectedImageCaption.caption
+        selectedRow = indexPath.row
         navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -80,6 +83,24 @@ extension ViewController {
     func getDocumentsDirectory() -> URL {
         let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return path[0]
+    }
+    
+    func setupNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(updateImageCaptions),
+            name: UIApplication.updateImageCaptions, object: nil
+        )
+    }
+    
+    @objc
+    func updateImageCaptions(_ notification: NSNotification) {
+        if let dict = notification.userInfo as NSDictionary?,
+           let newCaption = dict["caption"] as? String,
+           let selectedRow {
+            imageCaptions[selectedRow].caption = newCaption
+            let selectedIndex = IndexPath(row: selectedRow, section: 0)
+            tableView.reloadRows(at: [selectedIndex], with: .none)
+        }
     }
 }
 
