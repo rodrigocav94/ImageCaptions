@@ -11,10 +11,13 @@ class DetailViewController: UIViewController {
     var uiImage: UIImage!
     var caption: String!
     
+    var captionLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupImageView()
         setupNavBar()
+        setupImageView()
+        setupCaptionLabel()
     }
     
     func setupImageView() {
@@ -29,6 +32,24 @@ class DetailViewController: UIViewController {
             imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+    
+    func setupCaptionLabel() {
+        
+        captionLabel = UILabel()
+        captionLabel.text = caption
+        captionLabel.font = .systemFont(ofSize: 24, weight: .heavy)
+        captionLabel.numberOfLines = 3
+        captionLabel.translatesAutoresizingMaskIntoConstraints = false
+        captionLabel.textAlignment = .center
+        captionLabel.sizeToFit()
+        view.addSubview(captionLabel)
+        
+        NSLayoutConstraint.activate([
+            captionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            captionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            captionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
         ])
     }
     
@@ -55,6 +76,7 @@ class DetailViewController: UIViewController {
         let confirmChangeAction = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
             guard let typedCaption = ac.textFields?.first?.text, !typedCaption.isEmpty else { return }
             self?.caption = typedCaption
+            self?.captionLabel.text = typedCaption
             NotificationCenter.default.post(name: UIApplication.updateImageCaptions, object: nil, userInfo: ["caption": typedCaption])
         }
         ac.addAction(confirmChangeAction)
